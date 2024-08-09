@@ -8,8 +8,11 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProvider;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,8 +20,15 @@ import android.view.Window;
 import android.widget.Toast;
 
 import com.openclassrooms.tajmahal.R;
+import com.openclassrooms.tajmahal.data.service.RestaurantFakeApi;
 import com.openclassrooms.tajmahal.databinding.FragmentDetailsBinding;
 import com.openclassrooms.tajmahal.domain.model.Restaurant;
+import com.openclassrooms.tajmahal.domain.model.Review;
+import com.openclassrooms.tajmahal.ui.MainActivity;
+import com.openclassrooms.tajmahal.ui.reviews.ReviewFragment;
+
+import java.util.List;
+import java.util.Locale;
 
 import dagger.hilt.android.AndroidEntryPoint;
 
@@ -36,6 +46,8 @@ public class DetailsFragment extends Fragment {
     private FragmentDetailsBinding binding;
 
     private DetailsViewModel detailsViewModel;
+
+
 
     /**
      * This method is called when the fragment is first created.
@@ -108,6 +120,40 @@ public class DetailsFragment extends Fragment {
     private void updateUIWithRestaurant(Restaurant restaurant) {
         if (restaurant == null) return;
 
+        RestaurantFakeApi fakeApi = new RestaurantFakeApi();
+        List<Review> reviews = fakeApi.getReviews();
+
+        double averageRating = calculateAverageRating(reviews);
+
+
+        // Set the text for the button or view
+        binding.laisserUnavis.setText("Laisser un avis");
+
+// Set up the click listener
+        binding.laisserUnavis.setOnClickListener(new View.OnClickListener() {
+
+
+            @Override
+            public void onClick(View v) {
+
+                Log.d("ButtonClick", "Laisser un avis button clicked");
+
+                ReviewFragment fragmentB = new ReviewFragment();
+                FragmentManager fragmentManager = getParentFragmentManager();
+                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                fragmentTransaction.replace(R.id.container, fragmentB);
+                fragmentTransaction.addToBackStack(null); // Optional: Add to back stack
+                fragmentTransaction.commit();
+            }
+        });
+
+        // Set the average rating to the RatingBar
+        binding.ratingMain.setRating((float) averageRating);
+
+        // Setting the number of ratings
+        binding.numberOfRating.setText("("+String.valueOf(reviews.size())+")");
+        // Setting the average rating with formatting
+        binding.averageRating.setText(String.format(Locale.getDefault(), "%.1f", averageRating));
         binding.tvRestaurantName.setText(restaurant.getName());
         binding.tvRestaurantDay.setText(detailsViewModel.getCurrentDay(requireContext()));
         binding.tvRestaurantType.setText(String.format("%s %s", getString(R.string.restaurant), restaurant.getType()));
@@ -121,6 +167,19 @@ public class DetailsFragment extends Fragment {
         binding.buttonAdress.setOnClickListener(v -> openMap(restaurant.getAddress()));
         binding.buttonPhone.setOnClickListener(v -> dialPhoneNumber(restaurant.getPhoneNumber()));
         binding.buttonWebsite.setOnClickListener(v -> openBrowser(restaurant.getWebsite()));
+    }
+
+    private double calculateAverageRating(List<Review> reviews) {
+        if (reviews == null || reviews.isEmpty()) {
+            return 0.0;
+        }
+
+        double sum = 0.0;
+        for (Review review : reviews) {
+            sum += review.getRate();
+        }
+
+        return sum / reviews.size();
     }
 
     /**

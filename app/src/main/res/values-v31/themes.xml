@@ -6,4 +6,9 @@
         <item name="android:windowSplashScreenAnimatedIcon">@drawable/splash_screen</item>
         <item name="android:statusBarColor">@color/red</item>
     </style>
+
+    <style name="RatingBar" parent="Theme.AppCompat">
+        <item name="colorControlNormal">@color/grey</item>
+        <item name="colorControlActivated">@color/yellow</item>
+    </style>
 </resources>

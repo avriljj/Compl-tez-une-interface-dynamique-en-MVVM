@@ -6,7 +6,7 @@ plugins {
 
 android {
     namespace = "com.openclassrooms.tajmahal"
-    compileSdk = 33
+    compileSdk = 34
 
     defaultConfig {
         applicationId = "com.openclassrooms.tajmahal"
@@ -38,7 +38,16 @@ android {
 }
 
 dependencies {
+
+    implementation ("androidx.appcompat:appcompat:1.6.1")
+
+    implementation ("androidx.navigation:navigation-fragment-ktx:2.5.3")
+    implementation ("androidx.navigation:navigation-ui-ktx:2.5.3")
+
     implementation("androidx.work:work-runtime:2.8.1")
+    implementation("androidx.legacy:legacy-support-v4:1.0.0")
+    implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.8.3")
+    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.8.3")
     val hiltVersion = "2.44"
 
     //Hilt
