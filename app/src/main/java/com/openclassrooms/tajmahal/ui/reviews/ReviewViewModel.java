@@ -59,7 +59,8 @@ public class ReviewViewModel extends ViewModel {
             currentReviews = new ArrayList<>(currentReviews); // Create a new mutable list
         }
 
-        currentReviews.add(review);
+        currentReviews.add(0,review);
+
 
         reviewsLiveData.setValue(currentReviews); // Update LiveData with the new list
     }
