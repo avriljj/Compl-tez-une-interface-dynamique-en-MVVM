@@ -17,6 +17,8 @@ import com.openclassrooms.tajmahal.domain.model.Review;
 
 import com.bumptech.glide.Glide;
 
+import java.util.List;
+
 public class ReviewsAdapter extends ListAdapter<Review, ReviewsAdapter.ReviewViewHolder> {
 
     // Constructor

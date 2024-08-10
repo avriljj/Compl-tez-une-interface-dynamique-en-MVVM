@@ -1,5 +1,10 @@
 package com.openclassrooms.tajmahal.domain.model;
 
+import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.RatingBar;
+
 import java.util.Objects;
 
 
@@ -22,19 +27,14 @@ public class Review {
     /** The rating provided by the user. Typically out of 5 or 10. */
     private int rate;
 
-    /**
-     * Constructs a new Review instance.
-     *
-     * @param username the name of the user leaving the review
-     * @param picture  the profile picture URL or path of the user
-     * @param comment  the feedback or comment from the user
-     * @param rate     the rating given by the user
-     */
-    public Review(String username, String picture, String comment, int rate) {
-        this.username = username;
-        this.picture = picture;
-        this.comment = comment;
-        this.rate = rate;
+
+
+    public Review(String currentUser, String currentUserImage, String reviewText, int rating) {
+
+        this.username = currentUser;
+        this.picture = currentUserImage;
+        this.comment = reviewText;
+        this.rate = rating;
     }
 
     /**

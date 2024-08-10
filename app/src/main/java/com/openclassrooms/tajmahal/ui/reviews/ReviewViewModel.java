@@ -1,4 +1,4 @@
-package com.openclassrooms.myrepo.ui;
+package com.openclassrooms.tajmahal.ui.reviews;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
@@ -8,6 +8,9 @@ import com.openclassrooms.tajmahal.data.repository.ReviewRepository;
 import com.openclassrooms.tajmahal.domain.model.Review;
 
 import java.util.List;
+import java.util.ArrayList;
+
+
 
 
 /**
@@ -18,6 +21,7 @@ public class ReviewViewModel extends ViewModel {
 
     private final ReviewRepository reviewRepository;
     private final MutableLiveData<List<Review>> reviewsLiveData;
+
 
     /**
      * Initializes the ViewModel by creating a repository and loading the reviews.
@@ -45,4 +49,19 @@ public class ReviewViewModel extends ViewModel {
         List<Review> reviews = reviewRepository.getReviews(); // Ensure this method returns a list of reviews
         reviewsLiveData.postValue(reviews);
     }
+
+    // Method to add a review
+    public void addReview(Review review) {
+        List<Review> currentReviews = reviewsLiveData.getValue();
+        if (currentReviews == null) {
+            currentReviews = new ArrayList<>();
+        } else {
+            currentReviews = new ArrayList<>(currentReviews); // Create a new mutable list
+        }
+
+        currentReviews.add(review);
+
+        reviewsLiveData.setValue(currentReviews); // Update LiveData with the new list
+    }
+
 }

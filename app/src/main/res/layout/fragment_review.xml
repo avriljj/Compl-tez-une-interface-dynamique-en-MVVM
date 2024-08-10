@@ -38,6 +38,8 @@
               android:layout_width="match_parent"
               android:layout_height="wrap_content">
               <ImageView
+                  android:id="@+id/imageView"
+                  android:contentDescription="profile picture"
                   android:scaleType="centerCrop"
                   android:src="@drawable/manon_garcia"
                   android:layout_width="40dp"

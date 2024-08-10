@@ -5,7 +5,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.ViewModelProvider;
-import com.openclassrooms.myrepo.ui.ReviewViewModel;
+import com.openclassrooms.tajmahal.ui.reviews.ReviewViewModel;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import android.os.Bundle;
@@ -22,6 +22,7 @@ import com.openclassrooms.tajmahal.databinding.FragmentReviewBinding;
 import com.openclassrooms.tajmahal.databinding.ReviewItemBinding;
 import com.openclassrooms.tajmahal.domain.model.Review;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class ReviewFragment extends Fragment {
@@ -29,10 +30,10 @@ public class ReviewFragment extends Fragment {
     private ReviewViewModel viewModel;
     private FragmentReviewBinding binding;
 
-    private ReviewItemBinding bindingItem;
     private float myRating = 0;
     private ReviewsAdapter adapter;
     private List<Review> reviewList;
+    private List<Review> reviewList2;
     private RestaurantFakeApi fakeApi = new RestaurantFakeApi();
 
     public static ReviewFragment newInstance() {
@@ -71,6 +72,7 @@ public class ReviewFragment extends Fragment {
 
         // Retrieve reviews from the fake API
         reviewList = fakeApi.getReviews();
+        reviewList2 = new ArrayList<>();
 
         Log.d("error","fakeapi");
         Log.d("error",reviewList.toString() );
@@ -82,6 +84,10 @@ public class ReviewFragment extends Fragment {
 
         setupViewModel();
         setupRatingBar();
+
+        binding.validateReviewButton.setOnClickListener(v -> saveNewReview());
+
+
 
     }
 
@@ -107,4 +113,40 @@ public class ReviewFragment extends Fragment {
         });
 
     }
+
+    private void saveNewReview() {
+        // Retrieve user input
+        String currentUser = binding.activeUser.getText().toString();
+        String reviewText = binding.editText.getText().toString();
+        int rating = Math.round(binding.rating.getRating());
+
+        // Create a new Review object
+        Review newReview = new Review(currentUser, "https://xsgames.co/randomusers/assets/avatars/male/71.jpg", reviewText, rating);
+
+        // Get the current list of reviews
+        List<Review> currentReviews = viewModel.getReviews().getValue();
+
+        // Create a new mutable list if the current list is unmodifiable or null
+        List<Review> updatedReviews;
+        if (currentReviews == null) {
+            updatedReviews = new ArrayList<>();
+        } else {
+            updatedReviews = new ArrayList<>(currentReviews); // Create a new mutable list
+        }
+
+        // Add the new review to the mutable list
+        updatedReviews.add(newReview);
+
+        // Update the LiveData with the new list
+        viewModel.addReview(newReview);
+
+        // Log confirmation
+        Log.d("review", "Review added: " + newReview);
+        Log.d("review", "CurrentUser: " + currentUser);
+        Log.d("review", "reviewText: " + reviewText);
+        Log.d("review", "rating: " + rating);
+        Log.d("review", "reviewList: " + reviewList);
+        Log.d("review", "reviewList2: " + reviewList2);
+    }
+
 }
