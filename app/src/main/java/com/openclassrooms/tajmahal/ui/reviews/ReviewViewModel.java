@@ -51,7 +51,7 @@ public class ReviewViewModel extends ViewModel {
     }
 
     // Method to add a review
-    public void addReview(Review review) {
+    public boolean addReview(Review review) {
         List<Review> currentReviews = reviewsLiveData.getValue();
         if (currentReviews == null) {
             currentReviews = new ArrayList<>();
@@ -63,10 +63,8 @@ public class ReviewViewModel extends ViewModel {
 
 
         reviewsLiveData.setValue(currentReviews); // Update LiveData with the new list
-    }
 
-    public void validateData(){
-
+        return true;
     }
 
 }

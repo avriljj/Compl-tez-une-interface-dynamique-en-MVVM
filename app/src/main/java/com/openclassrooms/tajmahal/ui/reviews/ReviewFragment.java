@@ -135,11 +135,13 @@ public class ReviewFragment extends Fragment {
         }
 
         validateReviewData();
-        // Add the new review to the mutable list
-        updatedReviews.add(newReview);
+        if (validateReviewData()){
+            // Add the new review to the mutable list
+            updatedReviews.add(newReview);
 
-        // Update the LiveData with the new list
-        viewModel.addReview(newReview);
+            // Update the LiveData with the new list
+            viewModel.addReview(newReview);
+        }
 
         // Log confirmation
         Log.d("review", "Review added: " + newReview);
