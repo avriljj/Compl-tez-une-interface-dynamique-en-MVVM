@@ -13,10 +13,13 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.RatingBar;
+import android.widget.Toast;
 
 import com.openclassrooms.tajmahal.R;
 import com.openclassrooms.tajmahal.data.service.RestaurantFakeApi;
 import com.openclassrooms.tajmahal.databinding.FragmentReviewBinding;
+import com.openclassrooms.tajmahal.databinding.ReviewItemBinding;
 import com.openclassrooms.tajmahal.domain.model.Review;
 
 import java.util.List;
@@ -25,6 +28,9 @@ public class ReviewFragment extends Fragment {
 
     private ReviewViewModel viewModel;
     private FragmentReviewBinding binding;
+
+    private ReviewItemBinding bindingItem;
+    private float myRating = 0;
     private ReviewsAdapter adapter;
     private List<Review> reviewList;
     private RestaurantFakeApi fakeApi = new RestaurantFakeApi();
@@ -39,6 +45,8 @@ public class ReviewFragment extends Fragment {
         // Inflate the layout using view binding
         binding = FragmentReviewBinding.inflate(inflater, container, false);
         return binding.getRoot();
+
+
     }
 
     @Override
@@ -73,6 +81,8 @@ public class ReviewFragment extends Fragment {
         binding.recyclerView.setAdapter(adapter);
 
         setupViewModel();
+        setupRatingBar();
+
     }
 
     private void setupViewModel() {
@@ -84,5 +94,17 @@ public class ReviewFragment extends Fragment {
         if (adapter != null) {
             adapter.submitList(reviews); // Assuming you're using a ListAdapter
         }
+    }
+
+    private void setupRatingBar(){
+        binding.rating.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
+            @Override
+            public void onRatingChanged(RatingBar ratingBar, float v, boolean b) {
+                myRating = v; // Store the selected rating
+                Toast.makeText(getContext(), "Rating: " + myRating, Toast.LENGTH_SHORT).show();
+
+            }
+        });
+
     }
 }

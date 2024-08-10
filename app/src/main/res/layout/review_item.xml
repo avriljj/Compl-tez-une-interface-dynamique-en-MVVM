@@ -67,14 +67,14 @@
                         android:layout_height="wrap_content"/>
 
                     <RatingBar
-                        android:id="@+id/rating"
+                        android:id="@+id/ratingbarSetup"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:theme="@style/RatingBar"
                         style="?android:attr/ratingBarStyleSmall"
                         android:numStars="5"
                         android:layout_margin="16dp"
-                        android:rating="4"
+                        android:rating="0"
                         android:stepSize="0.5" />
 
 

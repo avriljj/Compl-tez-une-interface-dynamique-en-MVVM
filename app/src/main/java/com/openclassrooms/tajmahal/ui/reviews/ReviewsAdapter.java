@@ -4,6 +4,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.RatingBar;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -36,6 +37,7 @@ public class ReviewsAdapter extends ListAdapter<Review, ReviewsAdapter.ReviewVie
         Review review = getItem(position);
         holder.textView.setText(review.getComment());
         holder.userNameTextView.setText(review.getUsername());
+        holder.ratingbarView.setRating(review.getRate());
         // Load review user avatar using Glide or another image loading library
         Glide.with(holder.itemView.getContext())
                 .load(review.getPicture())
@@ -48,11 +50,14 @@ public class ReviewsAdapter extends ListAdapter<Review, ReviewsAdapter.ReviewVie
         ImageView avatarView;
         TextView userNameTextView;
 
+        RatingBar ratingbarView;
+
         public ReviewViewHolder(@NonNull View itemView) {
             super(itemView);
             textView = itemView.findViewById(R.id.commentTextView);
             avatarView = itemView.findViewById(R.id.avatarView);
             userNameTextView = itemView.findViewById(R.id.userInList);
+            ratingbarView = itemView.findViewById(R.id.ratingbarSetup);
         }
     }
 
