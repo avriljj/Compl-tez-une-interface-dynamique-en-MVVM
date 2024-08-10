@@ -39,6 +39,9 @@ android {
 
 dependencies {
 
+
+    implementation ("com.github.bumptech.glide:glide:4.12.0")
+
     implementation ("androidx.appcompat:appcompat:1.6.1")
 
     implementation ("androidx.navigation:navigation-fragment-ktx:2.5.3")

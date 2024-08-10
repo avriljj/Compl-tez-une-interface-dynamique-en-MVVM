@@ -4,9 +4,12 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
+import androidx.lifecycle.ViewModelProvider;
+import com.openclassrooms.myrepo.ui.ReviewViewModel;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,6 +23,7 @@ import java.util.List;
 
 public class ReviewFragment extends Fragment {
 
+    private ReviewViewModel viewModel;
     private FragmentReviewBinding binding;
     private ReviewsAdapter adapter;
     private List<Review> reviewList;
@@ -60,9 +64,25 @@ public class ReviewFragment extends Fragment {
         // Retrieve reviews from the fake API
         reviewList = fakeApi.getReviews();
 
+        Log.d("error","fakeapi");
+        Log.d("error",reviewList.toString() );
+
         // Set up the adapter
-        adapter = new ReviewsAdapter(reviewList);
+        adapter = new ReviewsAdapter();
         binding.recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         binding.recyclerView.setAdapter(adapter);
+
+        setupViewModel();
+    }
+
+    private void setupViewModel() {
+        viewModel = new ViewModelProvider(this).get(ReviewViewModel.class);
+        viewModel.getReviews().observe(getViewLifecycleOwner(), this::updateReviewList);
+    }
+
+    private void updateReviewList(List<Review> reviews) {
+        if (adapter != null) {
+            adapter.submitList(reviews); // Assuming you're using a ListAdapter
+        }
     }
 }
