@@ -134,6 +134,7 @@ public class ReviewFragment extends Fragment {
             updatedReviews = new ArrayList<>(currentReviews); // Create a new mutable list
         }
 
+        validateReviewData();
         // Add the new review to the mutable list
         updatedReviews.add(newReview);
 
@@ -148,5 +149,23 @@ public class ReviewFragment extends Fragment {
         Log.d("review", "reviewList: " + reviewList);
         Log.d("review", "reviewList2: " + reviewList2);
     }
+
+    private boolean validateReviewData() {
+        String reviewText = binding.editText.getText().toString();
+        float rating = binding.rating.getRating();
+
+        if (reviewText.isEmpty()) {
+            Toast.makeText(getContext(), "Review comment cannot be empty", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+
+        if (rating == 0) {
+            Toast.makeText(getContext(), "Please provide a star rating", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+
+        return true; // Data is valid
+    }
+
 
 }

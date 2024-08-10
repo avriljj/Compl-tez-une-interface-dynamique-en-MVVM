@@ -65,4 +65,8 @@ public class ReviewViewModel extends ViewModel {
         reviewsLiveData.setValue(currentReviews); // Update LiveData with the new list
     }
 
+    public void validateData(){
+
+    }
+
 }
