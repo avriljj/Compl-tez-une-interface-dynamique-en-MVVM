@@ -20,7 +20,10 @@ import java.util.ArrayList;
 public class ReviewViewModel extends ViewModel {
 
     private final ReviewRepository reviewRepository;
-    private final MutableLiveData<List<Review>> reviewsLiveData;
+  //  private final MutableLiveData<List<Review>> reviewsLiveData;
+
+    private final MutableLiveData<List<Review>> reviewsLiveData = new MutableLiveData<>(new ArrayList<>());
+
 
 
     /**
@@ -28,7 +31,7 @@ public class ReviewViewModel extends ViewModel {
      */
     public ReviewViewModel() {
         reviewRepository = new ReviewRepository(); // Ensure this repository is set up for reviews
-        reviewsLiveData = new MutableLiveData<>();
+     //   reviewsLiveData = new MutableLiveData<>();
         loadReviews();
     }
 
@@ -50,21 +53,17 @@ public class ReviewViewModel extends ViewModel {
         reviewsLiveData.postValue(reviews);
     }
 
-    // Method to add a review
+    // Method to add a review if valid
     public boolean addReview(Review review) {
-        List<Review> currentReviews = reviewsLiveData.getValue();
-        if (currentReviews == null) {
-            currentReviews = new ArrayList<>();
-        } else {
-            currentReviews = new ArrayList<>(currentReviews); // Create a new mutable list
+        if (review.getComment().isEmpty() || review.getRate() <= 0) {
+            return false; // Invalid review, do not update LiveData
         }
 
+        List<Review> currentReviews = new ArrayList<>(reviewsLiveData.getValue());
         currentReviews.add(0,review);
-
-
-        reviewsLiveData.setValue(currentReviews); // Update LiveData with the new list
-
-        return true;
+        reviewsLiveData.setValue(currentReviews);
+        return true; // Review added successfully
     }
+
 
 }
