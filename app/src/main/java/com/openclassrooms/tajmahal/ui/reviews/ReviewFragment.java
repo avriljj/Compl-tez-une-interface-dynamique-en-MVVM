@@ -121,7 +121,7 @@ public class ReviewFragment extends Fragment {
         int rating = Math.round(binding.rating.getRating());
 
         // Create a new Review object
-        Review newReview = new Review(currentUser, "https://xsgames.co/randomusers/assets/avatars/male/71.jpg", reviewText, rating);
+        Review newReview = new Review(currentUser, "https://xsgames.co/randomusers/assets/avatars/female/0.jpg", reviewText, rating);
 
         // Get the current list of reviews
         List<Review> currentReviews = viewModel.getReviews().getValue();
