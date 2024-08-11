@@ -8,6 +8,7 @@ android {
     namespace = "com.openclassrooms.tajmahal"
     compileSdk = 34
 
+
     defaultConfig {
         applicationId = "com.openclassrooms.tajmahal"
         minSdk = 24
@@ -19,6 +20,7 @@ android {
     }
 
     buildTypes {
+
         release {
             isMinifyEnabled = false
             proguardFiles(
@@ -35,6 +37,7 @@ android {
     buildFeatures {
         viewBinding = true
     }
+
 }
 
 dependencies {
