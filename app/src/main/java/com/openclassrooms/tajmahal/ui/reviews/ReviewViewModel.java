@@ -20,8 +20,6 @@ import java.util.ArrayList;
 public class ReviewViewModel extends ViewModel {
 
     private final ReviewRepository reviewRepository;
-  //  private final MutableLiveData<List<Review>> reviewsLiveData;
-
     private final MutableLiveData<List<Review>> reviewsLiveData = new MutableLiveData<>(new ArrayList<>());
 
 
@@ -31,7 +29,6 @@ public class ReviewViewModel extends ViewModel {
      */
     public ReviewViewModel() {
         reviewRepository = new ReviewRepository(); // Ensure this repository is set up for reviews
-     //   reviewsLiveData = new MutableLiveData<>();
         loadReviews();
     }
 

@@ -71,12 +71,4 @@ public class RestaurantFakeApi implements RestaurantApi {
         return reviews;
     }
 
-    /**
-     * Adds a new review to the list.
-     * @param review The review to be added.
-     */
-    public void addReview(Review review) {
-        reviews.add(review);
-    }
-
 }

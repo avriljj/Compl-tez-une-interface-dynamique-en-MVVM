@@ -1,12 +1,7 @@
 package com.openclassrooms.tajmahal.domain.model;
 
-import android.widget.EditText;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.RatingBar;
 
 import java.util.Objects;
-
 
 /**
  * Represents a user review.
@@ -108,6 +103,7 @@ public class Review {
     public void setRate(int rate) {
         this.rate = rate;
     }
+
 
     /**
      * Compares this review with another object for equality.

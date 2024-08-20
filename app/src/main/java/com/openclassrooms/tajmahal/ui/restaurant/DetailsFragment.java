@@ -1,5 +1,6 @@
 package com.openclassrooms.tajmahal.ui.restaurant;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.Color;
 import android.net.Uri;
@@ -24,8 +25,8 @@ import com.openclassrooms.tajmahal.data.service.RestaurantFakeApi;
 import com.openclassrooms.tajmahal.databinding.FragmentDetailsBinding;
 import com.openclassrooms.tajmahal.domain.model.Restaurant;
 import com.openclassrooms.tajmahal.domain.model.Review;
-import com.openclassrooms.tajmahal.ui.MainActivity;
 import com.openclassrooms.tajmahal.ui.reviews.ReviewFragment;
+import com.openclassrooms.tajmahal.ui.reviews.ReviewViewModel;
 
 import java.util.List;
 import java.util.Locale;
@@ -46,6 +47,8 @@ public class DetailsFragment extends Fragment {
     private FragmentDetailsBinding binding;
 
     private DetailsViewModel detailsViewModel;
+
+    private ReviewViewModel reviewViewModel;
 
 
 
@@ -74,7 +77,23 @@ public class DetailsFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         setupUI(); // Sets up user interface components.
         setupViewModel(); // Prepares the ViewModel for the fragment.
-        detailsViewModel.getTajMahalRestaurant().observe(requireActivity(), this::updateUIWithRestaurant); // Observes changes in the restaurant data and updates the UI accordingly.
+
+        // Initialize the shared ViewModel
+        reviewViewModel = new ViewModelProvider(requireActivity()).get(ReviewViewModel.class);
+
+        // Observe the LiveData for changes in reviews
+        reviewViewModel.getReviews().observe(getViewLifecycleOwner(), reviews -> {
+            // Update the number of ratings when the data changes
+            binding.numberOfRating.setText("(" + reviews.size() + ")");
+            binding.ratingMain.setRating(calculateAverageRating(reviews));
+            binding.averageRating.setText(String.format(Locale.getDefault(), "%.1f", calculateAverageRating(reviews)));
+
+        });
+
+        detailsViewModel.getTajMahalRestaurant().observe(requireActivity(),
+                this::updateUIWithRestaurant); // Observes changes in the restaurant data and updates the UI accordingly.
+
+
     }
 
     /**
@@ -117,7 +136,8 @@ public class DetailsFragment extends Fragment {
      *
      * @param restaurant The restaurant object containing details to be displayed.
      */
-    private void updateUIWithRestaurant(Restaurant restaurant) {
+    @SuppressLint("SetTextI18n")
+    private void  updateUIWithRestaurant(Restaurant restaurant) {
         if (restaurant == null) return;
 
         RestaurantFakeApi fakeApi = new RestaurantFakeApi();
@@ -130,28 +150,24 @@ public class DetailsFragment extends Fragment {
         binding.laisserUnavis.setText("Laisser un avis");
 
 // Set up the click listener
-        binding.laisserUnavis.setOnClickListener(new View.OnClickListener() {
+        binding.laisserUnavis.setOnClickListener(v -> {
 
+            Log.d("ButtonClick", "Laisser un avis button clicked");
 
-            @Override
-            public void onClick(View v) {
-
-                Log.d("ButtonClick", "Laisser un avis button clicked");
-
-                ReviewFragment fragmentB = new ReviewFragment();
-                FragmentManager fragmentManager = getParentFragmentManager();
-                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                fragmentTransaction.replace(R.id.container, fragmentB);
-                fragmentTransaction.addToBackStack(null); // Optional: Add to back stack
-                fragmentTransaction.commit();
-            }
+            ReviewFragment fragmentB = new ReviewFragment();
+            FragmentManager fragmentManager = getParentFragmentManager();
+            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+            fragmentTransaction.replace(R.id.container, fragmentB);
+            fragmentTransaction.addToBackStack(null); // Optional: Add to back stack
+            fragmentTransaction.commit();
         });
 
         // Set the average rating to the RatingBar
         binding.ratingMain.setRating((float) averageRating);
 
+
         // Setting the number of ratings
-        binding.numberOfRating.setText("("+String.valueOf(reviews.size())+")");
+        binding.numberOfRating.setText("("+ reviews.size() +")");
         // Setting the average rating with formatting
         binding.averageRating.setText(String.format(Locale.getDefault(), "%.1f", averageRating));
         binding.tvRestaurantName.setText(restaurant.getName());
@@ -169,9 +185,9 @@ public class DetailsFragment extends Fragment {
         binding.buttonWebsite.setOnClickListener(v -> openBrowser(restaurant.getWebsite()));
     }
 
-    private double calculateAverageRating(List<Review> reviews) {
+    private float calculateAverageRating(List<Review> reviews) {
         if (reviews == null || reviews.isEmpty()) {
-            return 0.0;
+            return 0.0F;
         }
 
         double sum = 0.0;
@@ -179,7 +195,7 @@ public class DetailsFragment extends Fragment {
             sum += review.getRate();
         }
 
-        return sum / reviews.size();
+        return (float) (sum / reviews.size());
     }
 
     /**

@@ -33,7 +33,6 @@ public class ReviewFragment extends Fragment {
     private float myRating = 0;
     private ReviewsAdapter adapter;
     private List<Review> reviewList;
-    private List<Review> reviewList2;
     private RestaurantFakeApi fakeApi = new RestaurantFakeApi();
 
     public static ReviewFragment newInstance() {
@@ -72,7 +71,6 @@ public class ReviewFragment extends Fragment {
 
         // Retrieve reviews from the fake API
         reviewList = fakeApi.getReviews();
-        reviewList2 = new ArrayList<>();
 
         Log.d("error","fakeapi");
         Log.d("error",reviewList.toString() );
@@ -85,6 +83,11 @@ public class ReviewFragment extends Fragment {
         setupViewModel();
         setupRatingBar();
 
+
+        // Set up the RatingBar listener
+        setupRatingBar();
+
+        // Add new review on button click
         binding.validateReviewButton.setOnClickListener(v -> saveNewReview());
 
 
@@ -92,7 +95,7 @@ public class ReviewFragment extends Fragment {
     }
 
     private void setupViewModel() {
-        viewModel = new ViewModelProvider(this).get(ReviewViewModel.class);
+        viewModel = new ViewModelProvider(requireActivity()).get(ReviewViewModel.class);
         viewModel.getReviews().observe(getViewLifecycleOwner(), this::updateReviewList);
     }
 
@@ -126,6 +129,7 @@ public class ReviewFragment extends Fragment {
         // Get the current list of reviews
         List<Review> currentReviews = viewModel.getReviews().getValue();
 
+
         // Create a new mutable list if the current list is unmodifiable or null
         List<Review> updatedReviews;
         if (currentReviews == null) {
@@ -141,6 +145,11 @@ public class ReviewFragment extends Fragment {
 
             // Update the LiveData with the new list
             viewModel.addReview(newReview);
+
+            // Clear the EditText after saving the review
+            binding.editText.setText(""); // This clears the text in the EditText
+
+            binding.rating.setRating(0);
         }
 
         // Log confirmation
@@ -149,7 +158,6 @@ public class ReviewFragment extends Fragment {
         Log.d("review", "reviewText: " + reviewText);
         Log.d("review", "rating: " + rating);
         Log.d("review", "reviewList: " + reviewList);
-        Log.d("review", "reviewList2: " + reviewList2);
     }
 
     private boolean validateReviewData() {
